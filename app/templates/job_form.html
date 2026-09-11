@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h2 class="mb-4">{{ title }}</h2>
+<form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.title.label(class="form-label") }}
+        {{ form.title(class="form-control") }}
+        {% for e in form.title.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="mb-3">
+        {{ form.short_description.label(class="form-label") }}
+        {{ form.short_description(class="form-control") }}
+        {% for e in form.short_description.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="mb-3">
+        {{ form.full_description.label(class="form-label") }}
+        {{ form.full_description(class="form-control", rows=6) }}
+        {% for e in form.full_description.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            {{ form.company.label(class="form-label") }}
+            {{ form.company(class="form-control") }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form.location.label(class="form-label") }}
+            {{ form.location(class="form-control") }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            {{ form.salary.label(class="form-label") }}
+            {{ form.salary(class="form-control") }}
+            {% for e in form.salary.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form.category.label(class="form-label") }}
+            {{ form.category(class="form-select") }}
+        </div>
+    </div>
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Jobs{% endblock %}
+{% block content %}
+<h1 class="mb-4">Open Positions</h1>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-auto">
+        <select name="category" class="form-select" onchange="this.form.submit()">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if cat == current_category %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-auto">
+        <select name="sort" class="form-select" onchange="this.form.submit()">
+            <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest first</option>
+            <option value="oldest" {% if current_sort == 'oldest' %}selected{% endif %}>Oldest first</option>
+            <option value="salary_high" {% if current_sort == 'salary_high' %}selected{% endif %}>Salary: high to low</option>
+            <option value="salary_low" {% if current_sort == 'salary_low' %}selected{% endif %}>Salary: low to high</option>
+        </select>
+    </div>
+</form>
+
+{% if jobs %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for job in jobs %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <span class="badge bg-secondary mb-2">{{ job.category }}</span>
+                <h5 class="card-title">{{ job.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ job.company }} &middot; {{ job.location }}</h6>
+                <p class="card-text">{{ job.short_description }}</p>
+                <p class="card-text">
+                    <small class="text-muted">
+                        Posted by <a href="{{ url_for('profile.public_profile', user_id=job.author.id) }}">{{ job.author.name }}</a>
+                        on {{ job.date_posted.strftime('%d %b %Y') }}
+                    </small>
+                </p>
+                <a href="{{ url_for('jobs.job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm">Read More</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-muted">No jobs found for this filter.</p>
+{% endif %}
+{% endblock %}

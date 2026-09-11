@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }}{% endblock %}
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <span class="badge bg-secondary mb-2">{{ job.category }}</span>
+        <h2>{{ job.title }}</h2>
+        <h5 class="text-muted">{{ job.company }} &middot; {{ job.location }}</h5>
+        <p class="mt-3">
+            Posted by <a href="{{ url_for('profile.public_profile', user_id=job.author.id) }}">{{ job.author.name }}</a>
+            on {{ job.date_posted.strftime('%d %B %Y') }}
+        </p>
+
+        {% if job.salary %}
+        <div class="alert alert-light border">
+            <strong>Salary:</strong> {{ "%.2f"|format(job.salary) }} GEL
+            {% if converted %}
+                &nbsp;(&asymp; {{ "%.2f"|format(converted.USD) }} USD, {{ "%.2f"|format(converted.EUR) }} EUR
+                <small class="text-muted">— live rate via Frankfurter API</small>)
+            {% else %}
+                <small class="text-muted">(live conversion currently unavailable)</small>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <h5 class="mt-4">Full Description</h5>
+        <p style="white-space: pre-line;">{{ job.full_description }}</p>
+
+        {% if current_user.is_authenticated and current_user == job.author %}
+        <div class="mt-4 d-flex gap-2">
+            <a href="{{ url_for('jobs.edit_job', job_id=job.id) }}" class="btn btn-outline-primary">Edit</a>
+            <form method="post" action="{{ url_for('jobs.delete_job', job_id=job.id) }}"
+                  onsubmit="return confirm('Delete this job posting?');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <a href="{{ url_for('main.index') }}" class="btn btn-link mt-3">&larr; Back to all jobs</a>
+    </div>
+</div>
+{% endblock %}

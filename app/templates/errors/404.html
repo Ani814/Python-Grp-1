@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-1 fw-bold text-secondary">404</h1>
+    <p class="fs-4">Oops — this page doesn't exist.</p>
+    <p class="text-muted">The job posting or page you're looking for may have been removed.</p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-primary mt-3">Back to Jobs</a>
+</div>
+{% endblock %}
